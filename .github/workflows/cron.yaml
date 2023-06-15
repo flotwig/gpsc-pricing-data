@@ -27,7 +27,7 @@ jobs:
         npm run download-pdfs -- --month $(date '+%m') --year $(date '+%Y') || echo 'Failed, continuing.'
     - name: Download next month's PDFs
       run: |
-        npm run download-pdfs -- --month $(date -d "next month" '+%m') --year $(date '+%Y') || echo 'Failed, continuing.'
+        npm run download-pdfs -- --month $(date -d "next month" '+%m') --year $(date -d "next month" '+%Y') || echo 'Failed, continuing.'
     - name: Commit files
       run: |
         git config --local user.email "gpsc-pricing-data@chary.us"
