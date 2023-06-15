@@ -33,5 +33,5 @@ jobs:
         git config --local user.email "gpsc-pricing-data@chary.us"
         git config --local user.name "GPSC Pricing Data GitHub Action"
         git add ./data
-        git commit -m "Update charts ($(date -u +"%x %H:%M"))" --allow-empty
+        git commit -m "Update charts ($(date -u +"%x %H:%M"))" || exit 0
         git push
