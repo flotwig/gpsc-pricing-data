@@ -5,7 +5,7 @@
   "main": "index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "extract-csv": "ts-node ./scripts/extract-csv.ts"
+    "download-pdfs": "ts-node ./scripts/download-pdfs.ts"
   },
   "repository": {
     "type": "git",
