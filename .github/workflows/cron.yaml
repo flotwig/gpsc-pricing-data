@@ -1,0 +1,37 @@
+name: 'Update charts'
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * *' # every day
+
+jobs:
+  update_charts:
+    if: "!contains(github.event.head_commit.message, 'Update charts')"
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        persist-credentials: true
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '20.0.0'
+        cache: 'npm'
+    - run: npm install
+    # Since we don't always run exactly when the charts are posted, check N+1 months and allow for failure.
+    - name: Download this month's PDFs
+      run: |
+        npm run download-pdfs -- --month $(date '+%m') --year $(date '+%Y') || echo 'Failed, continuing.'
+    - name: Download next month's PDFs
+      run: |
+        npm run download-pdfs -- --month $(date -d "next month" '+%m') --year $(date '+%Y') || echo 'Failed, continuing.'
+    - name: Commit files
+      run: |
+        git config --local user.email "gpsc-pricing-data@chary.us"
+        git config --local user.name "GPSC Pricing Data GitHub Action"
+        git add ./data
+        git commit -m "Update charts ($(date -u +"%x %H:%M"))" --allow-empty
+        git push
